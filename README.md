@@ -26,9 +26,11 @@ Might also be populated with other params (`security.users` for example, or `pgs
 
 ## Usage
 To deploy single environment use:
+
 `ansible-playbook -i <env_dir>/hosts spinup.yaml -e @vars/global.yaml --user <ssh_user> --private-key <ssh_private_key>`
 
 After testing environment is destroyed via following:
+
 `ansible-playbook -i <env_dir>/hosts spindown.yaml -e @vars/global.yaml --user <ssh_user> --private-key <ssh_private_key> --tags yes-i-am-sure`
 
 `ssh_user` - username that would be used during infrastructure bootstrap. Please note that ssh public key must reside alongside with private key and have exactly the same naming with `.pub` extension.
