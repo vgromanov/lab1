@@ -1,5 +1,5 @@
 global:
-  project: paytech-gcp-lab # Change to the project of your choice
+  project: playtech-gcp-lab # Change to the project of your choice
   region: us-central1
   zone: us-central1-c
   os_image: ubuntu-os-cloud/ubuntu-1804-lts
