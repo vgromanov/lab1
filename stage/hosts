@@ -1,0 +1,6 @@
+[db]
+stage-db1
+
+[web]
+stage-web1
+stage-web2

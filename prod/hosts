@@ -1,0 +1,6 @@
+[db]
+prod-db1
+
+[web]
+prod-web1
+prod-web2

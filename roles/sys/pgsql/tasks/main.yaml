@@ -1,0 +1,22 @@
+---
+- name: configure postgresql packages
+  set_fact:
+    pgsql_pkgs:
+      debian:
+      - postgresql-{{ pgsql.version }}
+      redhat:
+      - postgresql{{ pgsql.version }}-server
+  tags:
+  - pgsql
+
+- name: install posgresql
+  become: yes
+  package:
+    name: "{{ pgsql_pkgs[ansible_os_family | lower] }}"
+    state: present
+  tags:
+  - pgsql
+
+- name: postgresql post-install
+  include_tasks: initdb.yaml
+  when: ansible_os_family in ['RedHat', 'RED']

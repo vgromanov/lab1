@@ -1,0 +1,13 @@
+project       = "{{ env.project | default(global.project) }}"
+region        = "{{ env.region | default(global.region) }}"
+zone          = "{{ env.zone | default(global.zone) }}"
+env           = "{{ env.name }}"
+os_image      = "{{ env.os_image | default(global.os_image) }}"
+machine_type  = "{{ env.machine_type | default(global.machine_type) }}"
+ssh_user      = "{{ ssh_user }}"
+ssh_key       = "{{ ssh_pubkey }}"
+vms           = [
+{% for vm in groups['all'] %}
+    "{{ vm }}",
+{% endfor %}
+]

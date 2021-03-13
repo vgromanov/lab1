@@ -1,0 +1,36 @@
+- name: copy database dump
+  become: yes
+  become_user: postgres
+  copy:
+    src: "{{ item }}.sql.gz"
+    dest: "/tmp/{{ item }}.sql.gz"
+  tags:
+  - db
+
+- name: create target database
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{ item }}"
+    state: present
+  tags:
+  - db
+
+- name: restore dump
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{ item }}"
+    state: restore
+    target: "/tmp/{{ item }}.sql.gz"
+  tags:
+  - db
+
+- name: remove db dump
+  become: yes
+  become_user: postgres
+  file:
+    path: "/tmp/{{ item }}.sql.gz"
+    state: absent
+  tags:
+  - db

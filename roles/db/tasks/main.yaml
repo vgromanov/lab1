@@ -1,0 +1,3 @@
+- name: restore databases
+  include_tasks: restore-db.yaml
+  loop: "{{ db.restore }}"

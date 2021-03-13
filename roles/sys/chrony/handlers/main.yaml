@@ -1,0 +1,7 @@
+- name: restart chronyd service
+  become: yes
+  systemd:
+    name: chronyd
+    state: restarted
+  tags:
+  - chrony

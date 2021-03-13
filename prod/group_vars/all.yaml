@@ -1,0 +1,9 @@
+env:
+  name: prod
+  os_image: centos-cloud/centos-8
+  # project:
+  # region:
+  # zone:
+
+pgsql:
+  version: 13

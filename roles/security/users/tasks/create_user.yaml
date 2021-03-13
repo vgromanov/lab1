@@ -1,0 +1,20 @@
+- name: "create user {{ item.key }}"
+  become: yes
+  user:
+    name: "{{ item.key }}"
+    shell: "/bin/bash"
+    create_home: yes
+    state: present
+  tags:
+  - users
+
+- name: "configure public keys for {{ item.key }}"
+  become: yes
+  authorized_key:
+    user: "{{ item.key }}"
+    key: "{{ ssh_key }}"
+  loop: "{{ item.value }}"
+  loop_control:
+    loop_var: "ssh_key"
+  tags:
+  - users

@@ -1,0 +1,7 @@
+- name: install epel release repo
+  become: yes
+  yum:
+    name: epel-release
+    state: present
+  tags:
+  - epel

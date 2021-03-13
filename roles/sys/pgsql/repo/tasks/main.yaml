@@ -1,0 +1,37 @@
+- name: add postgresql repo
+  become: yes
+  dnf:
+    name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    state: present
+    disable_gpg_check: yes
+    update_cache: yes
+  when: ansible_os_family in ['RedHat', 'RED']
+  tags:
+  - pgsql:repo
+
+- name: disable built-in postgresqql repo
+  become: yes
+  command: "dnf -qy module disable postgresql"
+  when: ansible_os_family in ['RedHat', 'RED']
+  tags:
+  - pgsql:repo
+
+- name: add postgresql repo key
+  become: yes
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+  when: ansible_os_family in ['Debian']
+  tags:
+  - pgsql:repo
+
+- name: add postgresql repo
+  become: yes
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release | lower }}-pgdg main"
+    filename: pgsql
+    state: present
+    update_cache: yes
+  when: ansible_os_family in ['Debian']
+  tags:
+  - pgsql:repo

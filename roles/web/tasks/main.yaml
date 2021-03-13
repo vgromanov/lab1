@@ -1,0 +1,78 @@
+- name: query service list
+  service_facts:
+  tags:
+  - web
+
+- name: stop web service for maintenance
+  become: yes
+  systemd:
+    name: "{{ web.name }}.service"
+    state: stopped
+  when: ansible_facts.services[web.name+'.service'] is defined
+  tags:
+  - web
+
+- name: create nginx directories
+  become: yes
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+  - /opt/web
+  - /opt/web/html
+  tags:
+  - web
+
+- name: create nginx config
+  become: yes
+  template:
+    src: default.conf.j2
+    dest: /opt/web/default.conf
+  tags:
+  - web
+
+- name: create nginx page
+  become: yes
+  template:
+    src: index.html.j2
+    dest: /opt/web/html/index.html
+  tags:
+  - web
+
+- name: create nginx container
+  become: yes
+  docker_container:
+    image: "{{ web.image }}"
+    name: "{{ web.name }}"
+    detach: yes
+    mounts:
+    - target: "/etc/nginx/conf.d/default.conf"
+      source: "/opt/web/default.conf"
+      type: bind
+    - target: "/usr/share/nginx/html"
+      source: "/opt/web/html"
+      type: bind
+    published_ports:
+    - "{{ web.port }}:80"
+    state: present
+  tags:
+  - web
+
+- name: configure systemd nginx docker service
+  become: yes
+  template:
+    src: daemon.service.j2
+    dest: "/lib/systemd/system/{{ web.name }}.service"
+  tags:
+  - web
+
+- name: install and start {{ web.name }} service
+  become: yes
+  systemd:
+    daemon_reload: yes
+    name: "{{ web.name }}"
+    enabled: yes
+    state: started
+  tags:
+  - web

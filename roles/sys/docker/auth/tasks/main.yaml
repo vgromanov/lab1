@@ -1,0 +1,15 @@
+- name: create docker config dir
+  become: yes
+  file:
+    path: /root/.docker
+    state: directory
+  tags:
+  - docker:auth
+
+- name: configure docker credentials
+  become: yes
+  copy:
+    content: "{{ docker.auth }}"
+    dest: "/root/.docker/config.json"
+  tags:
+  - docker:auth

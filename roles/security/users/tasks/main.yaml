@@ -1,0 +1,5 @@
+---
+- include_tasks: "create_user.yaml"
+  with_dict: "{{ security.users }}"
+  tags:
+  - users

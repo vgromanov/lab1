@@ -1,0 +1,4 @@
+web:
+  image: nginx:alpine
+  name: nginx-hello
+  port: 80

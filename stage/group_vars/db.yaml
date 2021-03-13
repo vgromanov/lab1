@@ -1,0 +1,6 @@
+pgsql:
+  version: 13
+
+db:
+  restore:
+  - demo-medium

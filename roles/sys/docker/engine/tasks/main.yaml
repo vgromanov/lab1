@@ -1,0 +1,28 @@
+- name: install docker service
+  become: yes
+  package:
+    name:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    state: present
+  tags:
+  - docker:engine
+
+- name: assert docker service
+  become: yes
+  systemd:
+    name: docker.service
+    state: started
+    enabled: yes
+  tags:
+  - docker:engine
+
+- name: install docker python libs
+  become: yes
+  become_user: root
+  pip:
+    name: docker
+    state: present
+  tags:
+  - docker:engine

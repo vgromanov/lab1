@@ -1,0 +1,35 @@
+- name: assert permissions for pgsql dir
+  become: yes
+  file:
+    path: /var/lib/pgsql
+    state: directory
+    owner: postgres
+    group: postgres
+    recurse: yes
+  tags:
+  - pgsql
+
+- name: check postgresql init state
+  become: yes
+  stat:
+    path: /var/lib/pgsql/{{ pgsql.version }}/data/base
+  register: pg_base
+  tags:
+  - pgsql
+
+- name: initialize postgresql
+  become: yes
+  become_user: root
+  shell: "/usr/pgsql-{{ pgsql.version }}/bin/postgresql-{{ pgsql.version }}-setup initdb"
+  when: pg_base.stat.exists == False
+  tags:
+  - pgsql
+
+- name: assert postgresql service
+  become: yes
+  service:
+    name: postgresql-{{ pgsql.version }}
+    state: started
+    enabled: yes
+  tags:
+  - pgsql

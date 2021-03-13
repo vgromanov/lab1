@@ -1,0 +1,7 @@
+---
+dependencies:
+- role: utl/pip3
+  when: ansible_os_family in ['Debian']
+- role: sys/docker/repo
+- role: sys/docker/auth
+  when: docker.auth is defined

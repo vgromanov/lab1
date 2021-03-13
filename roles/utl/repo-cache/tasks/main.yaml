@@ -1,0 +1,15 @@
+- name: update repository cache
+  become: yes
+  yum:
+    update_cache: yes
+  when: ansible_os_family in ['RedHat', 'RED']
+  tags:
+  - repo-cache
+
+- name: update repository cache
+  become: yes
+  apt:
+    update_cache: yes
+  when: ansible_os_family in ['Debian']
+  tags:
+  - repo-cache

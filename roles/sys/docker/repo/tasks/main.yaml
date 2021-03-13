@@ -1,0 +1,28 @@
+- name: add docker-ce repository
+  become: yes
+  yum_repository:
+    name: docker-ce
+    baseurl: "https://download.docker.com/linux/centos/{{ ansible_distribution_major_version }}/$basearch/stable"
+    description: Docker CE repository
+    gpgkey: https://download.docker.com/linux/centos/gpg
+  when: ansible_os_family in ['RedHat', 'RED']
+  tags:
+  - docker:repo
+
+- name: add docker-ce gpg key
+  become: yes
+  apt_key:
+    url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+  when: ansible_os_family in ['Debian']
+  tags:
+  - docker:repo
+
+- name: add docker-ce repository
+  become: yes
+  apt_repository:
+    repo: "deb https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+    filename: docker-ce
+    update_cache: yes
+  when: ansible_os_family in ['Debian']
+  tags:
+  - docker:repo

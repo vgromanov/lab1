@@ -1,0 +1,26 @@
+---
+- name: install chrony
+  become: yes
+  package:
+    name: chrony
+    state: present
+  tags:
+  - chrony
+
+- name: assert chronyd service
+  become: yes
+  systemd:
+    name: chronyd
+    state: started
+    enabled: yes
+  tags:
+  - chrony
+
+- name: configure chrony
+  become: yes
+  template:
+    src: chrony.conf.j2
+    dest: /etc/chrony.conf
+  notify: restart chronyd service
+  tags:
+  - chrony

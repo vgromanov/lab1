@@ -1,0 +1,9 @@
+- name: install psycopg
+  become: yes
+  become_user: root
+  pip:
+    name:
+    - psycopg2-binary
+    state: present
+  tags:
+  - psycopg

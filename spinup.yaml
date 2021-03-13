@@ -1,0 +1,49 @@
+- hosts: localhost
+
+  vars:
+    ssh_user: "{{ ansible_ssh_user }}"
+    ssh_key: "{{ lookup('file', ansible_ssh_private_key_file) }}"
+    ssh_pubkey: "{{ lookup('file', ansible_ssh_private_key_file+'.pub') }}"
+
+  tasks:
+  - name: template tfvars
+    template:
+      src: terraform.tfvars.j2
+      dest: "{{ env.name }}/terraform.tfvars"
+
+  - name: spin up infrastructure
+    terraform:
+      project_path: "tf/"
+      state: present
+      force_init: true
+      workspace: "{{ env.name }}"
+      variables_files: "{{ inventory_dir }}/terraform.tfvars"
+    register: tfresult
+
+  - name: enirch inventory with ip addresses
+    lineinfile:
+      path: "{{ inventory_dir }}/hosts"
+      line: "{{ item.key }} ansible_host={{ item.value }}"
+      regexp: "^{{ item.key }}"
+      create: no
+      state: present
+    with_dict: "{{ tfresult.outputs.inventory.value }}"
+
+  - meta: refresh_inventory
+
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: waiting for spin up to complete
+    delegate_to: localhost
+    wait_for:
+      host: "{{ ansible_host }}"
+      port: 22
+
+- hosts: db
+  roles:
+  - db
+
+- hosts: web
+  roles:
+  - web

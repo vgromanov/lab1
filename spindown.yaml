@@ -1,0 +1,27 @@
+- hosts: localhost
+
+  vars:
+    ssh_user: "{{ ansible_ssh_user }}"
+    ssh_key: "{{ lookup('file', ansible_ssh_private_key_file) }}"
+    ssh_pubkey: "{{ lookup('file', ansible_ssh_private_key_file+'.pub') }}"
+
+  tasks:
+  - name: template tfvars
+    template:
+      src: terraform.tfvars.j2
+      dest: "{{ env.name }}/terraform.tfvars"
+    tags:
+    - never
+    - yes-i-am-sure
+
+  - name: destroy infrastructure
+    terraform:
+      project_path: "tf/"
+      state: absent
+      force_init: true
+      workspace: "{{ env.name }}"
+      variables_files: "../{{ env.name }}/terraform.tfvars"
+    register: tfresult
+    tags:
+    - never
+    - yes-i-am-sure

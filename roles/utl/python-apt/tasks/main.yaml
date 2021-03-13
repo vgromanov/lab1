@@ -1,0 +1,7 @@
+- name: install python-apt
+  become: yes
+  package:
+    name: python-apt
+    state: present
+  tags:
+  - python-apt

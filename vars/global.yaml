@@ -1,0 +1,15 @@
+global:
+  project: paytech-gcp-lab # Change to the project of your choice
+  region: us-central1
+  zone: us-central1-c
+  os_image: ubuntu-os-cloud/ubuntu-1804-lts
+  machine_type: f1-micro
+
+security:
+  users:
+    fred:
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICn2jLmrDKYwt1zouEjyAwdItBJ2A2MyULwLr1IbF5rz
+    mark:
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBQh0DIHOIs4ZBok6F8I2JmZGcdu6NPS8R7cY5ndQaID
+    adam:
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPY89d+z8ZjNPuqNUJ/Ny3X4PxDGz1LAWzSeMWBD1iwG
