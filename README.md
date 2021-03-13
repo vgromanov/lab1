@@ -13,10 +13,11 @@ At least one clean GCP project as a target
 
 ## Initial config
 Environments are set up `dev`, `stage` and `prod` directories
-var/global.yaml contains a set of values, that can partially be overridden in environment definition - the `global` section, that is used as a source for default values in several places:
+
+`var/global.yaml` contains a set of values, that can partially be overridden in environment definition - the `global` section, that is used as a source for default values in several places:
 ```yaml
 global:
-  project: paytech-gcp-lab # Change to the project of your choice
+  project: playtech-gcp-lab # Change to the project of your choice
   region: us-central1
   zone: us-central1-c
   os_image: ubuntu-os-cloud/ubuntu-1804-lts
