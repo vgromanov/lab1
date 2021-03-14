@@ -24,6 +24,7 @@ module "gcp_vm" {
   os_image = var.os_image
   ssh_user = var.ssh_user
   ssh_key = var.ssh_key
+  mahicne_type = var.machine_type
   vm_name = each.key
 }
 
